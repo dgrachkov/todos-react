@@ -17,19 +17,20 @@ const App = () => {
   return (
     <div className='app container'>
       <AppHeader
-        setVisible={setVisibleForm}
+        setVisibleForm={setVisibleForm}
       />
       <main className='main'>
         <TodoForm
-          visible={visibleForm}
-          setVisible={setVisibleForm}
+          visibleForm={visibleForm}
+          setVisibleForm={setVisibleForm}
           time={timeNow}
         />
         <TodoList
+          setVisibleForm={setVisibleForm}
           setVisibleNotification={setVisibleNotification}
         />
         {visibleNotification
-          ? <div className='notification_deletion'>
+          ? <div className='notification'>
               <img src='/images/checkmark-green.svg'/>
               <span>Successfully deleted</span>
             </div>

@@ -2,10 +2,11 @@ import React from 'react'
 import {useDispatch} from 'react-redux'
 import {removeTodo, completeTodo} from '../store/todoSlice'
 
-const Todo = ({todo, setVisibleNotification}) => {
+const Todo = ({todo, choose, setVisibleNotification}) => {
   const dispatch = useDispatch();
 
-  function removeTask(todo) {
+  function removeTask(e, todo) {
+    e.stopPropagation()
     dispatch(removeTodo(todo))
     setVisibleNotification(true);
     setTimeout(() => {
@@ -13,15 +14,13 @@ const Todo = ({todo, setVisibleNotification}) => {
     }, 1500)
   }
 
-  function completeTask(todo) {
+  function completeTask(e, todo) {
+    e.stopPropagation()
     dispatch(completeTodo(todo))
   }
 
   return (
-    <div
-      value={todo}
-      className="todo" 
-    >
+    <div value={todo} className="todo" onClick={() => choose(todo)}>
       <div className='todo_info'>
         <div className='todo_time'>
           {todo.time}
@@ -37,11 +36,11 @@ const Todo = ({todo, setVisibleNotification}) => {
         <img
           className='todo_delete'
           src='/images/delete.svg'
-          onClick={() => removeTask(todo)}
+          onClick={(e) => removeTask(e, todo)}
         />
         <div 
           className='todo_completion'
-          onClick={() => completeTask(todo)}
+          onClick={(e) => completeTask(e, todo)}
         >
           {todo.done && <img src='/images/checkmark.svg'/>}
         </div>

@@ -1,48 +1,51 @@
-import React, { useState } from 'react'
+import {React, useState} from 'react'
 import {useDispatch} from 'react-redux'
-import {addTodo} from '../store/todoSlice'
-import uuid from 'react-uuid';
+import {updateTodo} from '../store/todoSlice';
 
-const TodoForm = ({visibleForm, setVisibleForm, time}) => {
+const UpdateTodoForm = ({choosenTodo, visibleUpdate, setVisibleUpdate}) => {
   const dispatch = useDispatch();
-  const [quizForm, setQuizForm] = useState({
+  const [formUpdate, setFormUpdate] = useState({
     title: '',
     description: ''
   });
   const [visibleNotification , setVisibleNotification] = useState(false);
 
-  function createTodo(e) {
+  function changeTodo(e) {
     e.preventDefault();
 
-    const newTodo = {
-      id: uuid(),
-      time: time,
-      title: quizForm.title,
-      description: quizForm.description,
-      done: false,
+    const updatedTodo = {
+      id: choosenTodo.id,
+      title: formUpdate.title,
+      description: formUpdate.description,
+      time: choosenTodo.time,
+      done: choosenTodo.done,
     }
 
-    if (quizForm.title === '') {
+    if (formUpdate.title === '') {
       setVisibleNotification(true);
       setTimeout(() => {
         setVisibleNotification(false);
       }, 1500)
     }
 
-    if (quizForm.title !== '') {
-      setVisibleForm(false);
-      dispatch(addTodo(newTodo));
-      setQuizForm({title: '', description: ''})
+    if (updatedTodo.description === '') {
+      updatedTodo.description = choosenTodo.description
+    }
+
+    if (formUpdate.title !== '') {
+      dispatch(updateTodo(updatedTodo))
+      setFormUpdate({title: '', description: ''})
+      setVisibleUpdate(false)
     };
   }
 
-  return !visibleForm ? null : (
-    <div className='form_modal' onClick={() => setVisibleForm(false)}>
+  return !visibleUpdate ? null : (
+    <div className='form_modal' onClick={() => setVisibleUpdate(false)}>
       <form className='todo_form container' onClick={(e) => e.stopPropagation()}>
         <div className='form_title'>
-          <h2>Do your todo</h2>
+          <h2>Change your todo</h2>
           <img
-            onClick={() => setVisibleForm(false)}
+            onClick={() => setVisibleUpdate(false)}
             src='/images/delete.svg'
           />
         </div>
@@ -50,13 +53,13 @@ const TodoForm = ({visibleForm, setVisibleForm, time}) => {
           <label>Title</label>
           <div>
             <input
+              value={formUpdate.title}
+              onChange={(e) => setFormUpdate({...formUpdate, title: e.target.value})}
               type="text"
-              value={quizForm.title}
-              onChange={(e) => setQuizForm({...quizForm, title: e.target.value})}
-              placeholder='Enter a title'
+              placeholder={choosenTodo.title}
             />
             <img
-              onClick={() => setQuizForm({title: ''})}
+              onClick={() => setFormUpdate({title: ''})}
               src='/images/delete.svg'
             />
           </div>
@@ -65,21 +68,19 @@ const TodoForm = ({visibleForm, setVisibleForm, time}) => {
           <label>Description</label>
           <div>
             <textarea
+              value={formUpdate.description}
+              onChange={(e) => setFormUpdate({...formUpdate, description: e.target.value})}
               type="text"
-              value={quizForm.description}
-              onChange={(e) => setQuizForm({...quizForm, description: e.target.value})}
-              placeholder='Enter a description'
+              placeholder={choosenTodo.description}
             />
             <img
-              onClick={() => setQuizForm({description: ''})}
+              onClick={() => setFormUpdate({description: ''})}
               src='/images/delete.svg'
             />
           </div>
         </div>
         <div className='todo_form_btn'>
-          <button 
-            onClick={createTodo}
-          >
+          <button onClick={changeTodo}>
             <img src='/images/checkmark.svg'/>
           </button>
         </div>
@@ -95,4 +96,4 @@ const TodoForm = ({visibleForm, setVisibleForm, time}) => {
   )
 }
 
-export default TodoForm
+export default UpdateTodoForm

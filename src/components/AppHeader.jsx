@@ -1,7 +1,7 @@
 import React from 'react'
 import {useSelector} from 'react-redux'
 
-const AppHeader = ({setVisible}) => {
+const AppHeader = ({setVisibleForm}) => {
   const todos = useSelector(state => state.todos.todos);
 
   const completedTodos = todos.filter(todo => {
@@ -19,7 +19,7 @@ const AppHeader = ({setVisible}) => {
       </div>
       <button 
         className='create_todo_btn'
-        onClick={() => setVisible(true)}
+        onClick={() => setVisibleForm(true)}
       >
         <div></div>
         <img src='/images/add.svg'></img>
